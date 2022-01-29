@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "meal_planner"
+version = "0.1.0"
+description = "A meal planning application for large groups."
+authors = ["Mitch Rosenlund <merosenlund@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.0.1"
+
+[tool.poetry.dev-dependencies]
+flake9 = "^3.8.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
