@@ -56,7 +56,7 @@ ROOT_URLCONF = "meal_planner.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["meal_planner/templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
