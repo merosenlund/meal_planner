@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Meal Planner Login</h1>
+  <p>Use the form below to login.</p>
+  <form action="{% url "login" %}" method="post">
+    {{ form.as_p }}
+    {% csrf_token %}
+  </form>
+{% endblock %}
