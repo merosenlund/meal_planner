@@ -14,6 +14,12 @@
           <li {% if section == "dashboard" %}class="selected"{% endif %}>
             <a href="{% url "dashboard" %}">My Dashboard</a>
           </li>
+          <li {% if section == "meals" %}class="selected"{% endif %}>
+            <a href="{% url "meals" %}">Menus</a>
+          </li>
+          <li {% if section == "recipes" %}class="selected"{% endif %}>
+            <a href="{% url "recipes" %}">Recipes</a>
+          </li>
         </ul>
       {% endif %}
 
