@@ -1,5 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Here will eventually be a list of recipes</h1>
+<main class="mt-4">
+<div class="container">
+  <div class="content">
+    <h1 class="title">Recipes</h1>
+  </div>
+  <div class="columns">
+    <div role="region" aria-label="Recipe list information" class="column is-one-quarter">
+      <a class="button is-pushed-right mb-4">New Recipe</a>
+      <p>A list of all of the recipes both active and inactive.</p>
+      <p>
+        Future Features
+        <ul>
+          <li>Ability to set recipes as active or inactive</li>
+        </ul>
+      </p>
+    </div>
+    <div role="region" aria-label="Recipe list" class="column is-three-quarters box">
+  <table class="table is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Ingredient Count
+        </th>
+        <th>
+          Ingredients
+        </th>
+      </tr>
+    </thead>
+    {% for recipe in recipes %}
+      {% with ingredients=recipe.ingredients.all %}
+        <tr>
+          <td>
+            {{ recipe.name.title }}
+          </td>
+          <td>
+            {{ ingredients.count }}
+          </td>
+          <td>
+            {% for ingredient in ingredients.all %}
+              {{ ingredient.name }},
+            {% endfor %}
+          </td>
+        </tr>
+      {% endwith %}
+    {% endfor %}
+  </table>
+</div>
+</div>
+</div>
+</main>
 {% endblock %}

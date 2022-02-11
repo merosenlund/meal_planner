@@ -12,7 +12,11 @@ class Recipe(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(max_length=150, unique=True)
     uom = models.CharField(max_length=10)
-    recipes = models.ManyToManyField(Recipe, through="MealIngredient")
+    recipes = models.ManyToManyField(
+        Recipe,
+        related_name="ingredients",
+        through="MealIngredient"
+    )
 
     def __str__(self):
         return self.name.title()
@@ -32,7 +36,7 @@ class MealIngredient(models.Model):
 
 class Meal(models.Model):
     date = models.DateField()
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, related_name="meal", on_delete=models.CASCADE)
     planned = models.SmallIntegerField()
     actual = models.SmallIntegerField()
 
@@ -42,4 +46,4 @@ class Meal(models.Model):
 
 class PO(models.Model):
     date = models.DateField()
-    meal = models.OneToOneField(Meal, on_delete=models.CASCADE)
+    meal = models.OneToOneField(Meal, related_name="po", on_delete=models.CASCADE)
