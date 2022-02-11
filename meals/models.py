@@ -37,11 +37,11 @@ class MealIngredient(models.Model):
 class Meal(models.Model):
     date = models.DateField()
     recipe = models.ForeignKey(Recipe, related_name="meal", on_delete=models.CASCADE)
-    planned = models.SmallIntegerField()
-    actual = models.SmallIntegerField()
+    planned = models.SmallIntegerField(null=True, blank=True)
+    actual = models.SmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.name.title()
+        return f"{self.recipe.name} on {self.date}"
 
 
 class PO(models.Model):
