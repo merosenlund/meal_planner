@@ -12,7 +12,9 @@ class Recipe(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(max_length=150, unique=True)
     uom = models.CharField(max_length=10)
-    recipes = models.ManyToManyField(Recipe, related_name="ingredients", through="MealIngredient")
+    recipes = models.ManyToManyField(
+        Recipe, related_name="ingredients", through="MealIngredient"
+    )
 
     def __str__(self):
         return self.name.title()

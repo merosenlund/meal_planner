@@ -15,19 +15,19 @@
     </thead>
     {% for recipe in recipes %}
       {% with ingredients=recipe.ingredients.all %}
-      <tr>
-        <td>
-          {{ recipe.name.title }}
-        </td>
-        <td>
-          {{ ingredients.count }}
-        </td>
-        <td>
-          {% for ingredient in ingredients.all %}
-            {{ ingredient.name }},
-          {% endfor %}
-        </td>
-      </tr>
+        <tr>
+          <td>
+            {{ recipe.name.title }}
+          </td>
+          <td>
+            {{ ingredients.count }}
+          </td>
+          <td>
+            {% for ingredient in ingredients.all %}
+              {{ ingredient.name }},
+            {% endfor %}
+          </td>
+        </tr>
       {% endwith %}
     {% endfor %}
   </table>

@@ -7,28 +7,42 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('meals', '0005_alter_mealingredient_recipe'),
+        ("meals", "0005_alter_mealingredient_recipe"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ingredient',
-            name='recipes',
-            field=models.ManyToManyField(related_name='ingredients', through='meals.MealIngredient', to='meals.Recipe'),
+            model_name="ingredient",
+            name="recipes",
+            field=models.ManyToManyField(
+                related_name="ingredients",
+                through="meals.MealIngredient",
+                to="meals.Recipe",
+            ),
         ),
         migrations.AlterField(
-            model_name='meal',
-            name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='meal', to='meals.recipe'),
+            model_name="meal",
+            name="recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="meal",
+                to="meals.recipe",
+            ),
         ),
         migrations.AlterField(
-            model_name='mealingredient',
-            name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='meals.recipe'),
+            model_name="mealingredient",
+            name="recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="meals.recipe"
+            ),
         ),
         migrations.AlterField(
-            model_name='po',
-            name='meal',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='po', to='meals.meal'),
+            model_name="po",
+            name="meal",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="po",
+                to="meals.meal",
+            ),
         ),
     ]

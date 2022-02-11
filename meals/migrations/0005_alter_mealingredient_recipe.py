@@ -7,13 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('meals', '0004_alter_mealingredient_unique_together'),
+        ("meals", "0004_alter_mealingredient_unique_together"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mealingredient',
-            name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ingredients', to='meals.recipe'),
+            model_name="mealingredient",
+            name="recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="ingredients",
+                to="meals.recipe",
+            ),
         ),
     ]
