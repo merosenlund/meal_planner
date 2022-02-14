@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('meals', '0006_alter_ingredient_recipes_alter_meal_recipe_and_more'),
+        ("meals", "0006_alter_ingredient_recipes_alter_meal_recipe_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='meal',
-            name='actual',
+            model_name="meal",
+            name="actual",
             field=models.SmallIntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='meal',
-            name='planned',
+            model_name="meal",
+            name="planned",
             field=models.SmallIntegerField(blank=True, null=True),
         ),
     ]

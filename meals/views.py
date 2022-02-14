@@ -8,7 +8,6 @@ from .models import Recipe, Meal
 def meal_list(request):
     today = datetime.now().date()
     meals = Meal.objects.filter(date__gte=today)
-
     context = {
         "section": "meals",
         "meals": meals,
@@ -17,12 +16,9 @@ def meal_list(request):
 
 
 def recipe_list(request):
-
     recipes = Recipe.objects.filter(is_active=True)
-
     context = {
         "section": "recipes",
         "recipes": recipes,
     }
-
     return render(request, "meals/recipe_list.html", context)

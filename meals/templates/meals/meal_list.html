@@ -1,5 +1,59 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Here will eventually be a list of meals</h1>
+  <main class="mt-4">
+    <div class="container">
+      <div class="content">
+        <h1 class="title">Meals</h1>
+      </div>
+      <div class="columns">
+        <div role="region" aria-label="Meal list information" class="column is-one-quarter">
+          <a class="button is-pushed-right mb-4">Schedule Meal</a>
+          <p>A list of all of the scheduled meals.</p>
+          <p>
+            Future Features
+            <ul>
+              <li></li>
+            </ul>
+          </p>
+        </div>
+        <div role="region" aria-label="Meal list" class="column is-three-quarters box">
+          <table class="table is-striped is-hoverable">
+            <thead>
+              <tr>
+                <th>
+                  Date
+                </th>
+                <th>
+                  Meal
+                </th>
+                <th>
+                  Planned
+                </th>
+                <th>
+                  Actual
+                </th>
+              </tr>
+            </thead>
+            {% for meal in meals %}
+              <tr>
+                <td>
+                  {{ meal.date }}
+                </td>
+                <td>
+                  {{ meal.recipe.name }}
+                </td>
+                <td>
+                  {{ meal.planned }}
+                </td>
+                <td>
+                  {{ meal.actual }}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
 {% endblock %}
