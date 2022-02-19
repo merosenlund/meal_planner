@@ -25,7 +25,7 @@ def recipe_list(request):
 
 
 def meal_form_view(request):
-    if request.method == "post":
+    if request.method == "POST":
         meal_form = MealForm(request.POST)
         if meal_form.is_valid():
             meal_form.save()

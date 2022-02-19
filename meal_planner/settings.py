@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
+    "meal_planner.bulma",
+    "django.forms",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -69,6 +71,7 @@ TEMPLATES = [
         },
     },
 ]
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 WSGI_APPLICATION = "meal_planner.wsgi.application"
 
