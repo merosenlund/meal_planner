@@ -11,8 +11,13 @@
           <p> Schedule a meal using the form to the right</p>
         </div>
         <div role="region" aria-label="Meal scheduling form" class="column is-three-quarters box">
-          {{ meal_form.as_bulma }}
-          {% csrf_token %}
+          <form method="post">
+            {{ meal_form.as_bulma }}
+            {% csrf_token %}
+            <div class="controls">
+              <button class="button is-primary">Schedule meal</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

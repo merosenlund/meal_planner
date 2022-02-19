@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from datetime import datetime
 
 from .models import Recipe, Meal
@@ -29,6 +30,7 @@ def meal_form_view(request):
         meal_form = MealForm(request.POST)
         if meal_form.is_valid():
             meal_form.save()
+            return redirect(reverse("meals"))
     else:
         meal_form = MealForm()
     context = {
