@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from datetime import datetime
 
 from .models import Recipe, Meal
+from .forms import MealForm
 
 
-# Create your views here.
 def meal_list(request):
     today = datetime.now().date()
     meals = Meal.objects.filter(date__gte=today)
@@ -22,3 +23,18 @@ def recipe_list(request):
         "recipes": recipes,
     }
     return render(request, "meals/recipe_list.html", context)
+
+
+def meal_form_view(request):
+    if request.method == "POST":
+        meal_form = MealForm(request.POST)
+        if meal_form.is_valid():
+            meal_form.save()
+            return redirect(reverse("meals"))
+    else:
+        meal_form = MealForm()
+    context = {
+        "section": "meals",
+        "meal_form": meal_form,
+    }
+    return render(request, "meals/create_meal.html", context)
