@@ -5,6 +5,7 @@
   <head>
     <title>Meal Planner</title>
     <link rel="stylesheet" href="{% static "css/base.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   </head>
   <body>
@@ -34,5 +35,30 @@
       </span>
     </div>
     {% block content %}{% endblock %}
+    {% if messages %}
+      {% for message in messages %}
+        {% if "success" in message.tags %}
+          <div class="from-right notification is-success" role="log">
+            <button class="delete"></button>
+            {{ message }}
+          </div>
+          {% elif "error" in message.tags %}
+          <div class="from-right notification is-danger" role="log">
+            <button class="delete"></button>
+            {{ message }}
+          </div>
+        {% elif "info" in message.tags %}
+          <div class="from-right notification is-info" role="log">
+            <button class="delete"></button>
+            {{ message }}
+          </div>
+        {% else %}
+          <div class="notification" role="log">
+            <button class="delete"></button>
+            {{ message }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
   </body>
 </html>

@@ -4,18 +4,18 @@
   <main class="mt-4">
     <div class="container">
       <div class="content">
-        <h1 class="title">Schedule meal</h1>
+        <h1 class="title">Create recipe</h1>
       </div>
       <div class="columns">
-        <div role="region" aria-label="Meal list information" class="column is-one-third">
+        <div role="region" aria-label="Recipe form information" class="column is-one-third">
           <p> Schedule a meal using the form to the right</p>
         </div>
-        <div role="region" aria-label="Meal scheduling form" class="column is-one-quarter box">
+        <div role="region" aria-label="Recipe creation form" class="column is-one-quarter box">
           <form method="post">
             {{ form.as_bulma }}
             {% csrf_token %}
             <div class="controls">
-              <button class="button is-primary mt-4">Schedule meal</button>
+              <button class="button is-primary mt-4">Create recipe</button>
             </div>
           </form>
         </div>
