@@ -41,6 +41,9 @@ class Meal(models.Model):
     def __str__(self):
         return f"{self.recipe.name} on {self.date}"
 
+    class Meta:
+        ordering = ["date"]
+
 
 class PO(models.Model):
     date = models.DateField()
