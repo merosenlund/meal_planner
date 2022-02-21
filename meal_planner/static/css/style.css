@@ -1,0 +1,284 @@
+/* Make a button like a navbar item. */
+button.navbar-item {
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    flex: 1 0 0px;
+    font-size: inherit;
+    height: auto;
+    text-align: left!important;
+    width: 100%;
+}
+
+button.navbar-item:hover, button.navbar-item:focus, button.navbar-item:active {
+    background-color: #efefef;
+    color: #000000;
+}
+
+main {
+    padding: 0 1em;
+}
+
+.has-background-transparent {
+    background-color: transparent !important;
+}
+
+.table.is-unbordered th,
+.table.is-unbordered td {
+    border-width: 0;
+}
+
+.table tr.subheading td,
+.table tr.subheading th {
+    border-bottom-width: 2px;
+}
+
+.form-errors .help,
+.form-errors .tag {
+    font-size: 1rem;
+}
+
+.form-errors .help.is-danger { color: white; }
+
+/* Helper class and animation for notifications to appear and disappear. */
+@keyframes notification-animation {
+    0% { margin-left: 110vw; }
+    10% { margin-left: calc(100vw - 22em); }
+    90% { margin-left: calc(100vw - 22em); }
+    100% { margin-left: 110vw; }
+}
+.from-right {
+    animation:  3s linear 0s 1 normal none notification-animation;
+    bottom: 2em;
+    position: fixed;
+    margin-left: 110vw;
+    width: 20em;
+    z-index: 50;
+}
+
+/* Some fanciness for the dropdown arrows of navbar menus. */
+.has-dropdown.is-active .navbar-link:not(.is-arrowless)::after,
+.has-dropdown:hover .navbar-link:not(.is-arrowless)::after {
+    transition: opacity .25s, transform .25s;
+}
+
+.has-dropdown.is-active .navbar-link:not(.is-arrowless)::after,
+.has-dropdown:hover .navbar-link:not(.is-arrowless)::after {
+    opacity: 0;
+    transform: rotate(135deg);
+}
+
+.cohort-workflow-expandable {
+    margin-top: 0 !important;
+    margin-bottom: 1em !important;
+    margin-left: 1em !important;
+}
+
+.cohort-workflow-expandable ul {
+    margin-top: 0 !important;
+}
+
+.cohort-summary {
+    margin-bottom: 4px !important;
+}
+
+.assessment-template-list {
+    list-style: none;
+}
+
+.assessment-template-list-item.is-active {
+    background-color: var(--primary-light);
+}
+
+.assessment-template-list-item + .assessment-template-list-item {
+    border-top: 1px solid var(--border-color);
+}
+
+.is-narrow-column {
+    width: 1rem;
+}
+
+.block-tag {
+    display: inline-block;
+    border-radius: 4px;
+    margin: 0.25rem;
+    padding: 0.5rem 1rem;
+}
+
+.block-tag.is-fullwidth {
+    width: 100%;
+}
+
+.block-tag.is-success {
+    color: var(--white);
+    background-color: var(--success);
+}
+
+.block-tag.is-warning {
+    color: var(--white);
+    background-color: var(--warning);
+}
+
+.block-tag.is-danger {
+    color: var(--white);
+    background-color: var(--danger);
+}
+
+.past-cohort-record {
+    border-top: 1px solid var(--border-color);
+}
+
+.is-bordered {
+    border: 1px solid var(--border-color);
+}
+
+.bl-1 {
+    border-left: 1px solid var(--border-color) !important;
+}
+
+.bb-1 {
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.br-1 {
+    border-right: 1px solid var(--border-color) !important;
+}
+
+.bt-1 {
+    border-top: 1px solid var(--border-color) !important;
+}
+
+#instructor-info table.is-bordered.is-tab-content-bordered,
+#instructor-info table.is-bordered .is-tab-content-bordered,
+#student-info .is-tab-content-bordered {
+    border: 1px solid var(--border-color);
+    border-top: 0 solid transparent;
+}
+
+.is-grid {
+    display: grid;
+}
+
+.past-cohort-info {
+    grid-template-columns: auto auto 1fr;
+    --grid-padding: 0.75rem;
+}
+
+.past-cohort-info > * {
+    border-top: 1px solid var(--border-color);
+}
+
+.past-cohort-info > :nth-child(3n + 1) {
+    padding: var(--grid-padding);
+    padding-left: 0;
+}
+
+.past-cohort-info > :nth-child(3n + 2) {
+    padding: var(--grid-padding);
+}
+
+.past-cohort-info > :nth-child(3n) {
+    padding: var(--grid-padding);
+    padding-right: 0;
+}
+
+.attendance-calendar {
+    display: inline-grid;
+    grid-template-columns: repeat(7, auto);
+    grid-auto-rows: 1fr;
+}
+
+.attendance-calendar-day-heading {
+    align-self: end;
+}
+
+.attendance-calendar-day {
+    background-color: var(--white);
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+}
+
+.attendance-calendar-date {
+    grid-column: 1 / span 3;
+    padding-bottom: .25rem;
+}
+
+.can-reveal {
+    cursor: pointer;
+}
+
+.is-shadowed {
+    box-shadow: var(--primary-shadow), var(--secondary-shadow);
+}
+
+.is-not-fullwidth {
+    width: auto;
+}
+
+label.is-required::after {
+    content: " (required)"
+}
+
+details summary {
+    cursor: pointer;
+    margin-bottom: 0.3em;
+    user-select: none;
+}
+
+details summary > * {
+    display: inline;
+    position: relative;
+    top: 0.15em;
+}
+
+details summary > :first-child {
+    margin-left: 0.25rem;
+}
+
+details[open] summary {
+    margin-bottom: 1rem;
+}
+
+.instructor-dashboard-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+}
+
+.instructor-dashboard-grid .card {
+    margin: 1em;
+}
+
+.is-status.is-danger-light {
+    background-color: var(--danger-light);
+}
+
+.is-status.is-warning-light {
+    background-color: var(--warning-light);
+}
+
+input.is-unbordered {
+    border-width: 0 !important;
+}
+tr.is-homework td{
+    background-color: lightgreen;
+}
+tr.is-lab td{
+    background-color: lightblue;
+}
+tr.is-lecture td{
+    background-color: lightsalmon;
+}
+tr.is-recap td{
+    background-color: lightyellow;
+}
+
+.textarea[markdown] {
+    white-space: nowrap;
+    resize: none;
+    font-family: monospace;
+    overflow-wrap: normal;
+    overflow-x: scroll;
+}

@@ -1,9 +1,10 @@
 from django.shortcuts import redirect, render
+from django.contrib import messages
 from django.urls import reverse
 from datetime import datetime
 
 from .models import Recipe, Meal
-from .forms import MealForm
+from .forms import MealForm, RecipeForm
 
 
 def meal_list(request):
@@ -30,11 +31,25 @@ def meal_form_view(request):
         meal_form = MealForm(request.POST)
         if meal_form.is_valid():
             meal_form.save()
+            messages.add_message(request, messages.SUCCESS, "Meal scheduled.")
             return redirect(reverse("meals"))
     else:
         meal_form = MealForm()
     context = {
         "section": "meals",
-        "meal_form": meal_form,
+        "form": meal_form,
     }
     return render(request, "meals/create_meal.html", context)
+
+
+def recipe_create_view(request):
+    if request.method == "POST":
+        form = RecipeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Recipe created.")
+            return redirect(reverse("recipes"))
+    else:
+        form = RecipeForm()
+        context = {"section": "recipes", "form": form}
+        return render(request, "meals/create_recipe.html", context)
