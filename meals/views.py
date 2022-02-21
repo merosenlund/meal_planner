@@ -51,8 +51,5 @@ def recipe_create_view(request):
             return redirect(reverse("recipes"))
     else:
         form = RecipeForm()
-        context = {
-            "section": "recipes",
-            "form": form
-        }
+        context = {"section": "recipes", "form": form}
         return render(request, "meals/create_recipe.html", context)
