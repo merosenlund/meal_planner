@@ -56,4 +56,3 @@ def recipe_create_view(request):
             "form": form
         }
         return render(request, "meals/create_recipe.html", context)
-
