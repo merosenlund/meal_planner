@@ -5,7 +5,7 @@ description = "A meal planning application for large groups."
 authors = ["Mitch Rosenlund <merosenlund@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9.9"
+python = "3.9.9"
 Django = "^4.0.1"
 reportlab = "^3.6.8"
 
