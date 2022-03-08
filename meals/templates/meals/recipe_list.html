@@ -8,12 +8,14 @@
       </div>
       <div class="columns">
         <div role="region" aria-label="Recipe list information" class="column is-one-quarter">
-          <a class="button is-pushed-right mb-4" href="{% url "create_recipe" %}">New Recipe</a>
+          {% comment %} <a class="button is-pushed-right mb-4" href="{% url "create_recipe" %}">New Recipe</a> {% endcomment %}
           <p>A list of all of the recipes both active and inactive.</p>
           <p>
             Future Features
-            <ul>
-              <li>Ability to set recipes as active or inactive</li>
+            <ul class="list">
+              <li> - Ability to set recipes as active or inactive</li>
+              <li> - Ability to create a new recipe</li>
+              <li> - Ability to edit recipes</li>
             </ul>
           </p>
         </div>

@@ -32,7 +32,7 @@ def recipe_list(request):
     return render(request, "meals/recipe_list.html", context)
 
 
-def meal_form_view(request):
+def meal_create_view(request):
     if request.method == "POST":
         meal_form = MealForm(request.POST)
         if meal_form.is_valid():
