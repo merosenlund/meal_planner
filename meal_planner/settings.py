@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,9 +81,13 @@ WSGI_APPLICATION = "meal_planner.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'meal_planner',
+        'USER': 'mievro',
+        'PASSWORD': 'Ioi5i99i',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -92,8 +97,8 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.\
-            UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation." +
+        "UserAttributeSimilarityValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -138,3 +143,6 @@ LOGIN_URL = "login"
 LOGOUT_URL = "logout"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())

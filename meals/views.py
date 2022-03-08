@@ -1,7 +1,13 @@
+import io
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.urls import reverse
+from django.http import FileResponse
 from datetime import datetime
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
 
 from .models import Recipe, Meal
 from .forms import MealForm, RecipeForm
@@ -53,3 +59,35 @@ def recipe_create_view(request):
         form = RecipeForm()
         context = {"section": "recipes", "form": form}
         return render(request, "meals/create_recipe.html", context)
+
+
+def print_meals(request):
+    # Create a file-like buffer to receive PDF data.
+    buffer = io.BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+    p = canvas.Canvas(buffer, pagesize=letter)
+    p.setTitle("Meal List")
+
+    # p.translate(0*inch, 11*inch)
+
+    text = p.beginText()
+
+    text.setTextOrigin(0.5*inch, 10.5*inch)
+
+    text.setFont("Helvetica-Oblique", 14)
+
+    text.textLine("Meals Will go Here")
+
+    text.setFillGray(0.4)
+
+    p.drawText(text)
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    buffer.seek(0)
+    return FileResponse(buffer, filename='hello.pdf')
