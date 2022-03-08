@@ -3,8 +3,11 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.urls import reverse
 from django.http import FileResponse
-from reportlab.pdfgen import canvas
 from datetime import datetime
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
 
 from .models import Recipe, Meal
 from .forms import MealForm, RecipeForm
@@ -63,11 +66,22 @@ def print_meals(request):
     buffer = io.BytesIO()
 
     # Create the PDF object, using the buffer as its "file."
-    p = canvas.Canvas(buffer)
+    p = canvas.Canvas(buffer, pagesize=letter)
+    p.setTitle("Meal List")
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 100, "Hello world.")
+    # p.translate(0*inch, 11*inch)
+
+    text = p.beginText()
+
+    text.setTextOrigin(0.5*inch, 10.5*inch)
+
+    text.setFont("Helvetica-Oblique", 14)
+
+    text.textLine("Meals Will go Here")
+
+    text.setFillGray(0.4)
+
+    p.drawText(text)
 
     # Close the PDF object cleanly, and we're done.
     p.showPage()
