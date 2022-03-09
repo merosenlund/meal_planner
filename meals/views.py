@@ -62,29 +62,49 @@ def recipe_create_view(request):
 
 
 def print_meals(request):
-    # Create a file-like buffer to receive PDF data.
-    buffer = io.BytesIO()
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.lib import colors
+    from reportlab.platypus import Paragraph, Frame, Table, TableStyle
 
-    # Create the PDF object, using the buffer as its "file."
+    buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=letter)
     p.setTitle("Meal List")
 
-    # p.translate(0*inch, 11*inch)
+    meals = Meal.objects.all()
 
-    text = p.beginText()
 
-    text.setTextOrigin(0.5*inch, 10.5*inch)
+    styles = getSampleStyleSheet()
+    styleH = styles['Heading1']
 
-    text.setFont("Helvetica-Oblique", 14)
+    for meal in meals:
+        data = [[
+            "Ingredient",
+            "Amount",
+            "Put Out",
+            "Left Over",
+        ]]
+        story = []
+        name = meal.recipe.name
+        story.append(Paragraph(name, styleH))
+        for ingredient in meal.recipe.ingredients.all():
+            data.append([
+                ingredient.name,
+                ingredient.uom,
+            ])
 
-    text.textLine("Meals Will go Here")
+        t = Table(data)
+        t.setStyle(TableStyle([
+            ("BOX", (0, 0), (-1, -1), 0.25, colors.black),
+            ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.black)
+        ]))
 
-    text.setFillGray(0.4)
+        story.append(t)
+        f = Frame(0.5*inch, 0.5*inch, 7*inch, 10*inch, showBoundary=1)
+        f.addFromList(story, p)
 
-    p.drawText(text)
+        # Close the PDF object cleanly, and we're done.
+        p.showPage()
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
     p.save()
 
     # FileResponse sets the Content-Disposition header so that browsers
