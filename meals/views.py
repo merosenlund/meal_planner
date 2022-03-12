@@ -1,6 +1,7 @@
 import io
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import FileResponse
 from datetime import datetime
@@ -13,6 +14,7 @@ from .models import Recipe, Meal
 from .forms import MealForm, RecipeForm
 
 
+@login_required
 def meal_list(request):
     today = datetime.now().date()
     meals = Meal.objects.filter(date__gte=today)
@@ -23,6 +25,7 @@ def meal_list(request):
     return render(request, "meals/meal_list.html", context)
 
 
+@login_required
 def recipe_list(request):
     recipes = Recipe.objects.filter(is_active=True)
     context = {
@@ -32,6 +35,7 @@ def recipe_list(request):
     return render(request, "meals/recipe_list.html", context)
 
 
+@login_required
 def meal_create_view(request):
     if request.method == "POST":
         meal_form = MealForm(request.POST)
@@ -48,6 +52,7 @@ def meal_create_view(request):
     return render(request, "meals/create_meal.html", context)
 
 
+@login_required
 def recipe_create_view(request):
     if request.method == "POST":
         form = RecipeForm(request.POST)
@@ -61,6 +66,7 @@ def recipe_create_view(request):
         return render(request, "meals/create_recipe.html", context)
 
 
+@login_required
 def print_meals(request):
     from reportlab.lib.styles import getSampleStyleSheet
     from reportlab.lib import colors
