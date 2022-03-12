@@ -2,7 +2,9 @@ import io
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import UpdateView
+from django.urls import reverse, reverse_lazy
 from django.http import FileResponse
 from datetime import datetime
 
@@ -23,6 +25,13 @@ def meal_list(request):
         "meals": meals,
     }
     return render(request, "meals/meal_list.html", context)
+
+
+class MealEditView(LoginRequiredMixin, UpdateView):
+    model = Meal
+    fields = ["date", "recipe", "planned", "actual"]
+    template_name = "meals/update_meal.html"
+    success_url = reverse_lazy("meals")
 
 
 @login_required
@@ -77,7 +86,8 @@ def print_meals(request):
     p.setTitle("Meal List")
     p.setFont("Helvetica", 10)
 
-    meals = Meal.objects.all()
+    today = datetime.now().date()
+    meals = Meal.objects.filter(date__gte=today)
 
     styles = getSampleStyleSheet()
     title_style = styles["Title"]
