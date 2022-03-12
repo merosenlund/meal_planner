@@ -69,45 +69,78 @@ def print_meals(request):
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=letter)
     p.setTitle("Meal List")
+    p.setFont("Helvetica", 10)
 
     meals = Meal.objects.all()
 
-
     styles = getSampleStyleSheet()
-    styleH = styles['Heading1']
+    title_style = styles["Title"]
 
     for meal in meals:
-        data = [[
-            "Ingredient",
+        story = []
+
+        story.append(Paragraph("Record Sheet", title_style))
+
+        name = meal.recipe.name.title()
+
+        header_data = [
+            ["Meal:", name],
+            ["Date:", meal.date],
+            ["# of pans of main dish:", ""],
+            ["# of pans left:", ""]
+        ]
+        header_table = Table(
+            header_data,
+            colWidths=("*", 1.5*inch),
+            spaceAfter=0.5*inch,
+            spaceBefore=0.5*inch
+        )
+
+        header_table.setStyle(TableStyle([
+            ("ALIGN", (0, 0), (0, -1), "RIGHT"),
+            ("LINEBELOW", (1, 0), (1, -1), 0.25, colors.black),
+        ]))
+
+        story.append(header_table)
+
+        ingredient_data = [[
+            "Ingredients",
             "Amount",
             "Put Out",
             "Left Over",
         ]]
-        story = []
-        name = meal.recipe.name
-        story.append(Paragraph(name, styleH))
-        for ingredient in meal.recipe.ingredients.all():
-            data.append([
-                ingredient.name,
-                ingredient.uom,
+
+        for recipe_ingredient in meal.recipe.mealingredient_set.all():
+            if meal.planned:
+                amount = f"{meal.planned * recipe_ingredient.serving}"
+                amount = amount.rstrip("0").rstrip(".")
+            else:
+                amount = 0
+
+            uom = recipe_ingredient.ingredient.uom
+            ingredient_data.append([
+                recipe_ingredient.ingredient.name.title(),
+                f"{amount} {uom}",
             ])
 
-        t = Table(data)
-        t.setStyle(TableStyle([
+        ingredient_table = Table(
+            ingredient_data, colWidths=(4*inch, "*", "*", "*")
+        )
+        ingredient_table.setStyle(TableStyle([
             ("BOX", (0, 0), (-1, -1), 0.25, colors.black),
-            ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.black)
+            ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.black),
+            ("LINEBELOW", (0, 0), (-1, 0), 2, colors.black),
+            ("LINEBELOW", (0, 0), (-1, 0), 2, colors.black),
+            ("ALIGN", (1, 0), (-1, 0), "CENTER")
         ]))
 
-        story.append(t)
-        f = Frame(0.5*inch, 0.5*inch, 7*inch, 10*inch, showBoundary=1)
+        story.append(ingredient_table)
+        f = Frame(0.5*inch, 0.5*inch, 7.5*inch, 10*inch)
+        f.hAlign = "LEFT"
         f.addFromList(story, p)
-
-        # Close the PDF object cleanly, and we're done.
         p.showPage()
 
     p.save()
 
-    # FileResponse sets the Content-Disposition header so that browsers
-    # present the option to save the file.
     buffer.seek(0)
-    return FileResponse(buffer, filename='hello.pdf')
+    return FileResponse(buffer, filename='meals.pdf')
