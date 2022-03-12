@@ -8,13 +8,14 @@
       </div>
       <div class="columns">
         <div role="region" aria-label="Meal list information" class="column is-one-quarter">
-          <a class="button is-pushed-right mb-4" href="{% url "schedule_meal" %}">Schedule Meal</a>
-          <a class="button is-pushed-right mb-4" target="_blank" href="{% url "print_meal" %}">Print Meals</a>
+          <div class="buttons">
+            <a class="button is-info" href="{% url "schedule_meal" %}">Schedule Meal</a>
+            <a class="button is-info" target="_blank" href="{% url "print_meal" %}">Print Meals</a>
+          </div>
           <p>A list of all of the scheduled meals.</p>
           <p>
-            Future Features
+            <p class="mt-4">Planned Features</p>
             <ul>
-              <li> - Ability to edit scheduled meals</li>
               <li> - Ability to see if a meal has been purchased or not</li>
               <li> - Ability to filter meals</li>
             </ul>
@@ -36,6 +37,9 @@
                 <th>
                   Actual
                 </th>
+                <th>
+
+                </th>
               </tr>
             </thead>
             {% for meal in meals %}
@@ -50,7 +54,16 @@
                   {{ meal.planned }}
                 </td>
                 <td>
-                  {{ meal.actual }}
+                  {% if meal.actual %}
+                    {{ meal.actual }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td>
+                  <a class="button is-text" href={% url "edit_meal" meal.id %}>
+                    Update
+                  </a>
                 </td>
               </tr>
             {% endfor %}
