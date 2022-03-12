@@ -22,6 +22,11 @@
           <li {% if section == "recipes" %}class="selected"{% endif %}>
             <a href="{% url "recipes" %}">Recipes</a>
           </li>
+          {% if user.is_superuser %}
+            <li>
+              <a href="/admin">Admin</a>
+            </li>
+          {% endif %}
         </ul>
       {% endif %}
 
