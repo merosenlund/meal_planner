@@ -10,13 +10,14 @@
         <div role="region" aria-label="Meal list information" class="column is-one-third">
           <p>Use the form to the right to update this meal.</p>
         </div>
-        <div role="region" aria-label="Meal scheduling form" class="column is-one-quarter box">
+        <div role="region" aria-label="Meal scheduling form" class="column is-one-third box">
           <form method="post">
             {{ form.as_bulma }}
             {% csrf_token %}
-            <div class="controls">
-              <button class="button is-primary mt-4">Update</button>
-            </div>
+            {% comment %} <div class="buttons"> {% endcomment %}
+              <input class="button is-primary mt-4 mr-4" type="submit" value="Update">
+              <a class="button is-danger mt-4" style="align-items: baseline;" href={% url "delete_meal" object.id %}>Delete</a>
+            {% comment %} </div> {% endcomment %}
           </form>
         </div>
       </div>

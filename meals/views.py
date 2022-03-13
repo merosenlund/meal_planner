@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from django.http import FileResponse
 from datetime import datetime
@@ -32,6 +32,12 @@ class MealEditView(LoginRequiredMixin, UpdateView):
     fields = ["date", "recipe", "planned", "actual"]
     template_name = "meals/update_meal.html"
     success_url = reverse_lazy("meals")
+
+
+class MealDeleteView(LoginRequiredMixin, DeleteView):
+    model = Meal
+    success_url = reverse_lazy("meals")
+    template_name = "meals/delete_meal.html"
 
 
 @login_required
