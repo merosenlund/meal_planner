@@ -81,6 +81,13 @@ def recipe_create_view(request):
         return render(request, "meals/create_recipe.html", context)
 
 
+class RecipeEditView(LoginRequiredMixin, UpdateView):
+    model = Recipe
+    fields = ["name", "is_active"]
+    template_name = "meals/update_recipe.html"
+    success_url = reverse_lazy("recipes")
+
+
 @login_required
 def print_meals(request):
     from reportlab.lib.styles import getSampleStyleSheet
@@ -132,7 +139,7 @@ def print_meals(request):
             "Left Over",
         ]]
 
-        for recipe_ingredient in meal.recipe.mealingredient_set.all():
+        for recipe_ingredient in meal.recipe.RecipeIngredient_set.all():
             if meal.planned:
                 amount = f"{meal.planned * recipe_ingredient.serving}"
                 amount = amount.rstrip("0").rstrip(".")

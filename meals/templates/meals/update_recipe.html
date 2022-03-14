@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="mt-4">
+    <div class="container">
+      <div class="content">
+        <h1 class="title">Update recipe</h1>
+      </div>
+      <div class="columns">
+        <div role="region" aria-label="Recipe update directions" class="column is-one-third">
+          <p>Use the form to the right to update this recipe.</p>
+        </div>
+        <div role="region" aria-label="Meal scheduling form" class="column is-one-third box">
+          <form method="post">
+            {{ form.as_bulma }}
+            {% csrf_token %}
+            {% comment %} <div class="buttons"> {% endcomment %}
+              <input class="button is-primary mt-4 mr-4" type="submit" value="Update">
+              <a class="button is-danger mt-4" style="align-items: baseline;" href={% url "delete_meal" object.id %}>Delete</a>
+            {% comment %} </div> {% endcomment %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
