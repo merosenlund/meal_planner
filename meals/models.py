@@ -1,19 +1,21 @@
 from django.db import models
 
 
-class Recipe(models.Model):
-    name = models.CharField(max_length=150)
-    is_active = models.BooleanField(default=True)
+class Ingredient(models.Model):
+    name = models.CharField(max_length=150, unique=True)
+    uom = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name.title()
 
 
-class Ingredient(models.Model):
-    name = models.CharField(max_length=150, unique=True)
-    uom = models.CharField(max_length=10)
-    recipes = models.ManyToManyField(
-        Recipe, related_name="ingredients", through="RecipeIngredient"
+class Recipe(models.Model):
+    name = models.CharField(max_length=150)
+    is_active = models.BooleanField(default=True)
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        related_name="recipes",
+        through="RecipeIngredient"
     )
 
     def __str__(self):
@@ -30,6 +32,7 @@ class RecipeIngredient(models.Model):
 
     class Meta:
         unique_together = ["recipe", "ingredient"]
+        ordering = ["id"]
 
 
 class Meal(models.Model):

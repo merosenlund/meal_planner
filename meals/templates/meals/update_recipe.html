@@ -7,18 +7,53 @@
         <h1 class="title">Update recipe</h1>
       </div>
       <div class="columns">
-        <div role="region" aria-label="Recipe update directions" class="column is-one-third">
+        <div role="region" aria-label="Recipe update directions" class="column is-one-quarter">
           <p>Use the form to the right to update this recipe.</p>
         </div>
-        <div role="region" aria-label="Meal scheduling form" class="column is-one-third box">
-          <form method="post">
-            {{ form.as_bulma }}
-            {% csrf_token %}
-            {% comment %} <div class="buttons"> {% endcomment %}
-              <input class="button is-primary mt-4 mr-4" type="submit" value="Update">
-              <a class="button is-danger mt-4" style="align-items: baseline;" href={% url "delete_meal" object.id %}>Delete</a>
-            {% comment %} </div> {% endcomment %}
-          </form>
+        <div role="region" aria-label="Recipe update form" class="column is-half">
+          <div class="content box">
+            <div class="columns">
+              <div class="column">
+                <form method="post">
+                  {{ form.as_bulma }}
+                  {% csrf_token %}
+                  {% comment %} <div class="buttons"> {% endcomment %}
+                    <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Done">
+                    <a class="button is-danger is-outlined mt-4" style="align-items: baseline;" href={% url "delete_meal" object.id %}>Delete</a>
+                  {% comment %} </div> {% endcomment %}
+                </form>
+              </div>
+              <div class="column">
+                <form method="post" action="{% url "add_ingredient" recipe.id %}">
+                  {{ ingredient_form.as_bulma}}
+                  {% csrf_token %}
+                  <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Add">
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="content box">
+            <p class="label">Ingredients:</p>
+            <table class="table">
+              <th>Ingredient</th>
+              <th>Serving Size</th>
+              <th></th>
+              <th></th>
+              {% for recipe_ingredient in recipe.recipeingredient_set.all %}
+                <tr>
+                  <td>{{ recipe_ingredient.ingredient }}</td>
+                  <td>{{ recipe_ingredient.serving }}</td>
+                  <td><a class="button is-text" href="{% url "edit_recipe_ingredient" recipe.id recipe_ingredient.id%}">Edit</a></td>
+                  <td><a class="button is-text" href="{% url "delete_recipe_ingredient" recipe.id recipe_ingredient.id %}">Remove</a></td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td>---</td>
+                  <td>---</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
         </div>
       </div>
     </div>
