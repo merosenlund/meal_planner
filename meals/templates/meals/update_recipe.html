@@ -26,7 +26,7 @@
                   {{ ingredient_form.as_bulma}}
                   {% csrf_token %}
                   <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Add">
-                  <a class="button is-info is-outlined mt-1" href="{% url "create_ingredient" object.id %}">Create New Ingredient</a>
+                  <a class="button is-info is-outlined mt-4" href="{% url "create_ingredient" object.id %}">Create New Ingredient</a>
                 </form>
               </div>
             </div>
