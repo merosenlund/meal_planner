@@ -35,22 +35,28 @@ class RecipeIngredient(models.Model):
         ordering = ["id"]
 
 
-class PO(models.Model):
+class Order(models.Model):
     date = models.DateField()
     is_complete = models.BooleanField(default=False)
 
-    def get_ingredients(self):
-        po_ingredients = {}
+    class Meta:
+        ordering = ["date", "-is_complete"]
 
-        for meal in self.meals:
+    def get_ingredients(self):
+        order_ingredients = {}
+
+        for meal in self.meals.all():
             meal_ingredients = meal.get_ingredients()
             for ingredient, [amount, uom] in meal_ingredients.items():
-                if po_ingredients.get(ingredient):
-                    po_ingredients[ingredient][0] += amount
+                if order_ingredients.get(ingredient):
+                    order_ingredients[ingredient][0] += amount
                 else:
-                    po_ingredients[ingredient] = [amount, uom]
+                    order_ingredients[ingredient] = [amount, uom]
 
-        return po_ingredients
+        return order_ingredients
+
+    def get_meal_count(self):
+        return self.meals.count()
 
 
 class Meal(models.Model):
@@ -62,12 +68,15 @@ class Meal(models.Model):
     )
     planned = models.SmallIntegerField(null=True, blank=True)
     actual = models.SmallIntegerField(null=True, blank=True)
-    po = models.ForeignKey(
-        PO,
+    order = models.ForeignKey(
+        Order,
         null=True, blank=True,
         related_name="meals",
         on_delete=models.PROTECT
     )
+
+    class Meta:
+        ordering = ["date", "-actual"]
 
     def __str__(self):
         return f"{self.recipe.name} on {self.date}"
