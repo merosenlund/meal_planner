@@ -40,7 +40,7 @@ class Order(models.Model):
     is_complete = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["date", "-is_complete"]
+        ordering = ["id", "-is_complete"]
 
     def get_ingredients(self):
         order_ingredients = {}
