@@ -43,7 +43,7 @@ class MealDeleteView(LoginRequiredMixin, DeleteView):
 
 @login_required
 def recipe_list(request):
-    recipes = Recipe.objects.filter(is_active=True)
+    recipes = Recipe.objects.all().order_by("-is_active")
     context = {
         "section": "recipes",
         "recipes": recipes,
