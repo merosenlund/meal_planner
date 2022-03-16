@@ -25,7 +25,7 @@ class Recipe(models.Model):
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    serving = models.DecimalField(max_digits=6, decimal_places=4)
+    serving = models.FloatField()
 
     def __str__(self):
         return f"{self.ingredient} for {self.recipe}"
@@ -33,6 +33,30 @@ class RecipeIngredient(models.Model):
     class Meta:
         unique_together = ["recipe", "ingredient"]
         ordering = ["id"]
+
+
+class Order(models.Model):
+    date = models.DateField()
+    is_complete = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["date", "-is_complete"]
+
+    def get_ingredients(self):
+        order_ingredients = {}
+
+        for meal in self.meals.all():
+            meal_ingredients = meal.get_ingredients()
+            for ingredient, [amount, uom] in meal_ingredients.items():
+                if order_ingredients.get(ingredient):
+                    order_ingredients[ingredient][0] += amount
+                else:
+                    order_ingredients[ingredient] = [amount, uom]
+
+        return order_ingredients
+
+    def get_meal_count(self):
+        return self.meals.count()
 
 
 class Meal(models.Model):
@@ -44,15 +68,33 @@ class Meal(models.Model):
     )
     planned = models.SmallIntegerField(null=True, blank=True)
     actual = models.SmallIntegerField(null=True, blank=True)
+    order = models.ForeignKey(
+        Order,
+        null=True, blank=True,
+        related_name="meals",
+        on_delete=models.PROTECT
+    )
+
+    class Meta:
+        ordering = ["date", "-actual"]
 
     def __str__(self):
         return f"{self.recipe.name} on {self.date}"
 
+    def get_ingredients(self):
+        ingredients = {}
+        recipe_ingredients = self.recipe.recipeingredient_set
+        if self.planned:
+            planned = self.planned
+        else:
+            planned = 0
 
-class PO(models.Model):
-    date = models.DateField()
-    meal = models.OneToOneField(
-        Meal,
-        related_name="po",
-        on_delete=models.CASCADE
-    )
+        for recipe_ingredient in recipe_ingredients.all():
+            ingredient = recipe_ingredient.ingredient.name
+            amount = round(recipe_ingredient.serving * planned)
+            uom = recipe_ingredient.ingredient.uom
+            if ingredients.get(ingredient):
+                ingredients[ingredient][0] += amount
+            else:
+                ingredients[ingredient] = [amount, uom]
+        return ingredients

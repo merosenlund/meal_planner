@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="mt-4">
+    <div class="container">
+      <div class="content">
+        <h1 class="title">Update order</h1>
+      </div>
+      <div class="columns">
+        <div role="region" aria-label="Order update directions" class="column is-one-quarter">
+          <p>Use the form to the right to update this order.</p>
+        </div>
+        <div role="region" aria-label="Order update form" class="column is-half">
+          <div class="content box">
+            <div class="columns">
+              <div class="column">
+                <form method="post">
+                  {{ form.as_bulma }}
+                  {% csrf_token %}
+                  <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Done">
+                  {% comment %} <a class="button is-danger is-outlined mt-4" style="align-items: baseline;" href={% url "delete_recipe" object.id %}>Delete</a> {% endcomment %}
+                </form>
+              </div>
+              <div class="column">
+                <form method="post" action="{% url "add_meals_to_order" object.id%}">
+                  {{ meal_form.as_bulma}}
+                  {% if no_meals %}
+                    <p>No meals to add to order.</p>
+                  {% else %}
+                    <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Add">
+                  {% endif %}
+                  {% csrf_token %}
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="content box">
+            <p class="label">Meals Added to Order:</p>
+            <table class="table">
+              <th>Date</th>
+              <th>Meal</th>
+              <th></th>
+              {% for meal in order.meals.all %}
+                <tr>
+                  <td>{{ meal.date }}</td>
+                  <td>{{ meal.recipe }}</td>
+                  <td><a class="button is-text" href="{% url "remove_meal_from_order" object.id meal.id %}">Remove</a></td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td>---</td>
+                  <td>---</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

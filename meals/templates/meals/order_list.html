@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="mt-4">
+    <div class="container">
+      <div class="content">
+        <h1 class="title">Orders</h1>
+      </div>
+      <div class="columns">
+        <div role="region" aria-label="Order list information" class="column is-one-quarter">
+          <div class="buttons">
+            <a class="button is-info is-outlined" href="{% url "create_order" %}">New Order</a>
+            <a class="button is-info is-outlined" target="_blank" href="{% url "print_orders" %}">Print Orders</a>
+          </div>
+          <p>A list of all orders.</p>
+          <p>
+            {% comment %} <p class="mt-4">Planned Features</p>
+            <ul>
+              <li> - Ability to see if a meal has been purchased or not</li>
+              <li> - Ability to filter meals</li>
+            </ul> {% endcomment %}
+          </p>
+        </div>
+        <div role="region" aria-label="Order list" class="column is-three-quarters box">
+          <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Is Complete</th>
+                <th>Meals in Order</th>
+                <th></th>
+              </tr>
+            </thead>
+            {% for order in order_list %}
+              <tr>
+                <td>{{ order.date }}</td>
+                <td>
+                  {% if order.is_complete %}
+                    Yes
+                  {% else %}
+                    No
+                  {% endif %}
+                </td>
+                <td>{{ order.meals.count }}</td>
+                <td><a class="button is-text" href={% url "update_order" order.id %}>Edit</a></td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
