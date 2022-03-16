@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse, reverse_lazy
 from django.http import FileResponse
 from datetime import datetime
@@ -13,7 +13,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 
-from .models import Recipe, Meal, RecipeIngredient
+from .models import Ingredient, Recipe, Meal, RecipeIngredient
 from .forms import MealForm, RecipeForm, RecipeIngredientForm
 
 
@@ -140,6 +140,17 @@ class RecipeIngredientEditView(LoginRequiredMixin, UpdateView):
 def recipe_ingredient_delete_view(request, recipe_pk, pk):
     RecipeIngredient.objects.get(pk=pk).delete()
     return redirect(reverse("update_recipe", args=[recipe_pk]))
+
+
+class IngredientCreateView(LoginRequiredMixin, CreateView):
+    model = Ingredient
+    fields = ["name", "uom"]
+    template_name = "meals/create_ingredient.html"
+    success_url = reverse_lazy("create_ingredient")
+
+    def get_success_url(self):
+        url = reverse("update_recipe", args=[self.kwargs.get("recipe_pk")])
+        return url
 
 
 @login_required

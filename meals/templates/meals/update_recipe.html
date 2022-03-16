@@ -17,10 +17,8 @@
                 <form method="post">
                   {{ form.as_bulma }}
                   {% csrf_token %}
-                  {% comment %} <div class="buttons"> {% endcomment %}
-                    <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Done">
-                    <a class="button is-danger is-outlined mt-4" style="align-items: baseline;" href={% url "delete_recipe" object.id %}>Delete</a>
-                  {% comment %} </div> {% endcomment %}
+                  <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Done">
+                  <a class="button is-danger is-outlined mt-4" style="align-items: baseline;" href={% url "delete_recipe" object.id %}>Delete</a>
                 </form>
               </div>
               <div class="column">
@@ -28,6 +26,7 @@
                   {{ ingredient_form.as_bulma}}
                   {% csrf_token %}
                   <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Add">
+                  <a class="button is-info is-outlined mt-1" href="{% url "create_ingredient" object.id %}">Create New Ingredient</a>
                 </form>
               </div>
             </div>
