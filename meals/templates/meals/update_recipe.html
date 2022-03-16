@@ -19,7 +19,7 @@
                   {% csrf_token %}
                   {% comment %} <div class="buttons"> {% endcomment %}
                     <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Done">
-                    <a class="button is-danger is-outlined mt-4" style="align-items: baseline;" href={% url "delete_meal" object.id %}>Delete</a>
+                    <a class="button is-danger is-outlined mt-4" style="align-items: baseline;" href={% url "delete_recipe" object.id %}>Delete</a>
                   {% comment %} </div> {% endcomment %}
                 </form>
               </div>

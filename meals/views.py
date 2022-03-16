@@ -96,6 +96,12 @@ class RecipeEditView(LoginRequiredMixin, UpdateView):
         return context
 
 
+class RecipeDeleteView(LoginRequiredMixin, DeleteView):
+    model = Recipe
+    success_url = reverse_lazy("recipes")
+    template_name = "meals/delete_recipe.html"
+
+
 @login_required
 def add_ingredient(request, recipe_pk):
     if request.method == "POST":
