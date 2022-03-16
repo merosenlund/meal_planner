@@ -314,7 +314,7 @@ def print_orders(request):
         story.append(Paragraph("Purchase Order", title_style))
 
         header_data = [
-            ["Date:", order.date]
+            ["Order #:", order.id]
         ]
         header_table = Table(
             header_data,

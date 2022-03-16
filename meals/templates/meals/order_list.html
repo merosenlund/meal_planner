@@ -25,14 +25,16 @@
           <table class="table is-striped is-hoverable is-fullwidth">
             <thead>
               <tr>
+                <th>Order #</th>
                 <th>Date</th>
-                <th>Is Complete</th>
+                <th>Completed</th>
                 <th>Meals in Order</th>
                 <th></th>
               </tr>
             </thead>
             {% for order in order_list %}
               <tr>
+                <td>{{ order.id }}</td>
                 <td>{{ order.date }}</td>
                 <td>
                   {% if order.is_complete %}
