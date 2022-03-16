@@ -21,6 +21,7 @@ from .forms import MealForm, RecipeForm, RecipeIngredientForm
 def meal_list(request):
     today = datetime.now().date()
     meals = Meal.objects.filter(date__gte=today)
+    ingredients = meals.first().get_ingredients()
     context = {
         "section": "meals",
         "meals": meals,
@@ -204,16 +205,11 @@ def print_meals(request):
             "Left Over",
         ]]
 
-        for recipe_ingredient in meal.recipe.recipeingredient_set.all():
-            if meal.planned:
-                amount = f"{meal.planned * recipe_ingredient.serving}"
-                amount = amount.rstrip("0").rstrip(".")
-            else:
-                amount = 0
+        ingredients = meal.get_ingredients()
 
-            uom = recipe_ingredient.ingredient.uom
+        for ingredient, [amount, uom] in ingredients.items():
             ingredient_data.append([
-                recipe_ingredient.ingredient.name.title(),
+                ingredient.title(),
                 f"{amount} {uom}",
             ])
 

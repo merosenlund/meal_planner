@@ -25,7 +25,7 @@ class Recipe(models.Model):
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    serving = models.DecimalField(max_digits=6, decimal_places=4)
+    serving = models.FloatField()
 
     def __str__(self):
         return f"{self.ingredient} for {self.recipe}"
@@ -33,6 +33,24 @@ class RecipeIngredient(models.Model):
     class Meta:
         unique_together = ["recipe", "ingredient"]
         ordering = ["id"]
+
+
+class PO(models.Model):
+    date = models.DateField()
+    is_complete = models.BooleanField(default=False)
+
+    def get_ingredients(self):
+        po_ingredients = {}
+
+        for meal in self.meals:
+            meal_ingredients = meal.get_ingredients()
+            for ingredient, [amount, uom] in meal_ingredients.items():
+                if po_ingredients.get(ingredient):
+                    po_ingredients[ingredient][0] += amount
+                else:
+                    po_ingredients[ingredient] = [amount, uom]
+
+        return po_ingredients
 
 
 class Meal(models.Model):
@@ -44,15 +62,30 @@ class Meal(models.Model):
     )
     planned = models.SmallIntegerField(null=True, blank=True)
     actual = models.SmallIntegerField(null=True, blank=True)
+    po = models.ForeignKey(
+        PO,
+        null=True, blank=True,
+        related_name="meals",
+        on_delete=models.PROTECT
+    )
 
     def __str__(self):
         return f"{self.recipe.name} on {self.date}"
 
+    def get_ingredients(self):
+        ingredients = {}
+        recipe_ingredients = self.recipe.recipeingredient_set
+        if self.planned:
+            planned = self.planned
+        else:
+            planned = 0
 
-class PO(models.Model):
-    date = models.DateField()
-    meal = models.OneToOneField(
-        Meal,
-        related_name="po",
-        on_delete=models.CASCADE
-    )
+        for recipe_ingredient in recipe_ingredients.all():
+            ingredient = recipe_ingredient.ingredient.name
+            amount = round(recipe_ingredient.serving * planned)
+            uom = recipe_ingredient.ingredient.uom
+            if ingredients.get(ingredient):
+                ingredients[ingredient][0] += amount
+            else:
+                ingredients[ingredient] = [amount, uom]
+        return ingredients
