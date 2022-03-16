@@ -24,14 +24,18 @@
               <div class="column">
                 <form method="post" action="{% url "add_meals_to_order" object.id%}">
                   {{ meal_form.as_bulma}}
+                  {% if no_meals %}
+                    <p>No meals to add to order.</p>
+                  {% else %}
+                    <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Add">
+                  {% endif %}
                   {% csrf_token %}
-                  <input class="button is-primary is-outlined mt-4 mr-4" type="submit" value="Add">
                 </form>
               </div>
             </div>
           </div>
           <div class="content box">
-            <p class="label">Meals on Order:</p>
+            <p class="label">Meals Added to Order:</p>
             <table class="table">
               <th>Date</th>
               <th>Meal</th>

@@ -183,6 +183,8 @@ class OrderUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["meal_form"] = MealOrderForm()
         context["section"] = "orders"
+        meal_count = context["meal_form"].fields["meals"].queryset.count()
+        context["no_meals"] = meal_count == 0
         return context
 
 
