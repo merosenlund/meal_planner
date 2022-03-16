@@ -11,12 +11,12 @@
           <a class="button is-info is-outlined mb-4" href="{% url "create_recipe" %}">New Recipe</a>
           <p>A list of all of the recipes both active and inactive.</p>
           <p>
-            Future Features
+            {% comment %} Future Features
             <ul class="list">
-              <li> - Ability to set recipes as active or inactive</li>
-              <li> - Ability to create a new recipe</li>
-              <li> - Ability to edit recipes</li>
-            </ul>
+              <li> - </li>
+              <li> - </li>
+              <li> - </li>
+            </ul> {% endcomment %}
           </p>
         </div>
         <div role="region" aria-label="Recipe list" class="column is-three-quarters box">
@@ -25,6 +25,7 @@
               <tr>
                 <th> Name</th>
                 <th>Ingredient Count</th>
+                <th>Status</th>
                 <th>Ingredients</th>
                 <th></th>
               </tr>
@@ -34,6 +35,7 @@
                 <tr>
                   <td>{{ recipe.name.title }}</td>
                   <td>{{ ingredients.count }}</td>
+                  <td>{% if recipe.is_active %}Active{% else %}Inactive{% endif %}</td>
                   <td>
                     {% for ingredient in ingredients.all %}
                       {% if forloop.last %}
