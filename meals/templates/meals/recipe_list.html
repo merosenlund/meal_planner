@@ -8,7 +8,7 @@
       </div>
       <div class="columns">
         <div role="region" aria-label="Recipe list information" class="column is-one-quarter">
-          {% comment %} <a class="button is-pushed-right mb-4" href="{% url "create_recipe" %}">New Recipe</a> {% endcomment %}
+          <a class="button is-info is-outlined mb-4" href="{% url "create_recipe" %}">New Recipe</a>
           <p>A list of all of the recipes both active and inactive.</p>
           <p>
             Future Features
@@ -23,30 +23,28 @@
           <table class="table is-striped is-hoverable">
             <thead>
               <tr>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Ingredient Count
-                </th>
-                <th>
-                  Ingredients
-                </th>
+                <th> Name</th>
+                <th>Ingredient Count</th>
+                <th>Ingredients</th>
+                <th></th>
               </tr>
             </thead>
             {% for recipe in recipes %}
               {% with ingredients=recipe.ingredients.all %}
                 <tr>
-                  <td>
-                    {{ recipe.name.title }}
-                  </td>
-                  <td>
-                    {{ ingredients.count }}
-                  </td>
+                  <td>{{ recipe.name.title }}</td>
+                  <td>{{ ingredients.count }}</td>
                   <td>
                     {% for ingredient in ingredients.all %}
-                      {{ ingredient.name }},
+                      {% if forloop.last %}
+                        {{ ingredient.name }}
+                      {% else %}
+                        {{ ingredient.name }},
+                      {% endif %}
                     {% endfor %}
+                  </td>
+                  <td>
+                    <a class="button is-text" href={% url "update_recipe" recipe.id %}>Edit</a>
                   </td>
                 </tr>
               {% endwith %}

@@ -3,17 +3,18 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse, reverse_lazy
 from django.http import FileResponse
 from datetime import datetime
+from django.db import IntegrityError
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 
-from .models import Recipe, Meal
-from .forms import MealForm, RecipeForm
+from .models import Ingredient, Recipe, Meal, RecipeIngredient
+from .forms import MealForm, RecipeForm, RecipeIngredientForm
 
 
 @login_required
@@ -72,13 +73,84 @@ def recipe_create_view(request):
     if request.method == "POST":
         form = RecipeForm(request.POST)
         if form.is_valid():
-            form.save()
+            recipe = form.save()
             messages.success(request, "Recipe created.")
-            return redirect(reverse("recipes"))
+            return redirect(reverse("update_recipe", args=[recipe.id]))
     else:
         form = RecipeForm()
         context = {"section": "recipes", "form": form}
         return render(request, "meals/create_recipe.html", context)
+
+
+class RecipeEditView(LoginRequiredMixin, UpdateView):
+    model = Recipe
+    fields = ["name", "is_active"]
+    template_name = "meals/update_recipe.html"
+    success_url = reverse_lazy("recipes")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["section"] = "recipes"
+        # Form for adding ingredients
+        context["ingredient_form"] = RecipeIngredientForm()
+        return context
+
+
+class RecipeDeleteView(LoginRequiredMixin, DeleteView):
+    model = Recipe
+    success_url = reverse_lazy("recipes")
+    template_name = "meals/delete_recipe.html"
+
+
+@login_required
+def add_ingredient(request, recipe_pk):
+    if request.method == "POST":
+        form = RecipeIngredientForm(request.POST)
+        if form.is_valid():
+            ingredient = form.save(commit=False)
+            recipe = Recipe.objects.get(pk=recipe_pk)
+            ingredient.recipe = recipe
+            try:
+                ingredient.save()
+            except IntegrityError:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     "That ingredient has already been added.")
+            else:
+                messages.success(request, "Ingredient added.")
+        else:
+            messages.add_message(request,
+                                 messages.ERROR,
+                                 "Something went wrong.")
+    return redirect(reverse("update_recipe", args=[recipe_pk]))
+
+
+class RecipeIngredientEditView(LoginRequiredMixin, UpdateView):
+    model = RecipeIngredient
+    fields = ["ingredient", "serving"]
+    template_name = "meals/update_recipe_ingredient.html"
+    success_url = reverse_lazy("recipes")
+
+    def get_success_url(self):
+        url = reverse("update_recipe", args=[self.object.recipe.id])
+        return url
+
+
+@login_required
+def recipe_ingredient_delete_view(request, recipe_pk, pk):
+    RecipeIngredient.objects.get(pk=pk).delete()
+    return redirect(reverse("update_recipe", args=[recipe_pk]))
+
+
+class IngredientCreateView(LoginRequiredMixin, CreateView):
+    model = Ingredient
+    fields = ["name", "uom"]
+    template_name = "meals/create_ingredient.html"
+    success_url = reverse_lazy("create_ingredient")
+
+    def get_success_url(self):
+        url = reverse("update_recipe", args=[self.kwargs.get("recipe_pk")])
+        return url
 
 
 @login_required
@@ -132,7 +204,7 @@ def print_meals(request):
             "Left Over",
         ]]
 
-        for recipe_ingredient in meal.recipe.mealingredient_set.all():
+        for recipe_ingredient in meal.recipe.recipeingredient_set.all():
             if meal.planned:
                 amount = f"{meal.planned * recipe_ingredient.serving}"
                 amount = amount.rstrip("0").rstrip(".")

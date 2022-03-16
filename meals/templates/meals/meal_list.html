@@ -9,8 +9,8 @@
       <div class="columns">
         <div role="region" aria-label="Meal list information" class="column is-one-quarter">
           <div class="buttons">
-            <a class="button is-info" href="{% url "schedule_meal" %}">Schedule Meal</a>
-            <a class="button is-info" target="_blank" href="{% url "print_meal" %}">Print Meals</a>
+            <a class="button is-info is-outlined" href="{% url "schedule_meal" %}">Schedule Meal</a>
+            <a class="button is-info is-outlined" target="_blank" href="{% url "print_meal" %}">Print Meals</a>
           </div>
           <p>A list of all of the scheduled meals.</p>
           <p>
@@ -25,34 +25,18 @@
           <table class="table is-striped is-hoverable is-fullwidth">
             <thead>
               <tr>
-                <th>
-                  Date
-                </th>
-                <th>
-                  Meal
-                </th>
-                <th>
-                  Planned
-                </th>
-                <th>
-                  Actual
-                </th>
-                <th>
-
-                </th>
+                <th>Date</th>
+                <th>Meal</th>
+                <th>Planned</th>
+                <th>Actual</th>
+                <th></th>
               </tr>
             </thead>
             {% for meal in meals %}
               <tr>
-                <td>
-                  {{ meal.date }}
-                </td>
-                <td>
-                  {{ meal.recipe.name }}
-                </td>
-                <td>
-                  {{ meal.planned }}
-                </td>
+                <td>{{ meal.date }}</td>
+                <td>{{ meal.recipe.name }}</td>
+                <td>{{ meal.planned }}</td>
                 <td>
                   {% if meal.actual %}
                     {{ meal.actual }}
@@ -61,9 +45,7 @@
                   {% endif %}
                 </td>
                 <td>
-                  <a class="button is-text" href={% url "edit_meal" meal.id %}>
-                    Edit
-                  </a>
+                  <a class="button is-text" href={% url "edit_meal" meal.id %}>Edit</a>
                 </td>
               </tr>
             {% endfor %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="columns content is-centered">
+      <div class="column is-one-third">
+        <h1>Delete Recipe</h1>
+        <p>
+          Are you sure you want to delete {{ object }}
+        </p>
+        <form action="{% url "delete_recipe" object.id %}" method="post">
+          {% csrf_token %}
+          <div class="buttons">
+            <input class="button is-danger is-outlined has-text-centered" type="submit" value="Yes">
+            <a class="button is-black is-outlined" style="align-items: baseline;" href="{% url "update_recipe" object.id %}">No</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
