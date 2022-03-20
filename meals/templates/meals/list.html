@@ -29,6 +29,7 @@
                 <th>Meal</th>
                 <th>Planned</th>
                 <th>Actual</th>
+                <th>Order #</th>
                 <th></th>
               </tr>
             </thead>
@@ -40,6 +41,13 @@
                 <td>
                   {% if meal.actual %}
                     {{ meal.actual }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td>
+                  {% if meal.order %}
+                    #{{ meal.order.id }}
                   {% else %}
                     -
                   {% endif %}

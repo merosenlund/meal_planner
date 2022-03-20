@@ -26,20 +26,20 @@ def meal_list(request):
         "section": "meals",
         "meals": meals,
     }
-    return render(request, "meals/meal_list.html", context)
+    return render(request, "meals/list.html", context)
 
 
 class MealEditView(LoginRequiredMixin, UpdateView):
     model = Meal
     fields = ["date", "recipe", "planned", "actual"]
-    template_name = "meals/update_meal.html"
+    template_name = "meals/update.html"
     success_url = reverse_lazy("meals")
 
 
 class MealDeleteView(LoginRequiredMixin, DeleteView):
     model = Meal
     success_url = reverse_lazy("meals")
-    template_name = "meals/delete_meal.html"
+    template_name = "meals/delete.html"
 
 
 @login_required
@@ -49,7 +49,7 @@ def recipe_list(request):
         "section": "recipes",
         "recipes": recipes,
     }
-    return render(request, "meals/recipe_list.html", context)
+    return render(request, "recipes/list.html", context)
 
 
 @login_required
@@ -66,7 +66,7 @@ def meal_create_view(request):
         "section": "meals",
         "form": meal_form,
     }
-    return render(request, "meals/create_meal.html", context)
+    return render(request, "meals/create.html", context)
 
 
 @login_required
@@ -80,13 +80,13 @@ def recipe_create_view(request):
     else:
         form = RecipeForm()
         context = {"section": "recipes", "form": form}
-        return render(request, "meals/create_recipe.html", context)
+        return render(request, "recipes/create.html", context)
 
 
 class RecipeEditView(LoginRequiredMixin, UpdateView):
     model = Recipe
     fields = ["name", "is_active"]
-    template_name = "meals/update_recipe.html"
+    template_name = "recipes/update.html"
     success_url = reverse_lazy("recipes")
 
     def get_context_data(self, **kwargs):
@@ -100,7 +100,7 @@ class RecipeEditView(LoginRequiredMixin, UpdateView):
 class RecipeDeleteView(LoginRequiredMixin, DeleteView):
     model = Recipe
     success_url = reverse_lazy("recipes")
-    template_name = "meals/delete_recipe.html"
+    template_name = "recipes/delete.html"
 
 
 @login_required
@@ -129,7 +129,7 @@ def add_ingredient(request, recipe_pk):
 class RecipeIngredientEditView(LoginRequiredMixin, UpdateView):
     model = RecipeIngredient
     fields = ["ingredient", "serving"]
-    template_name = "meals/update_recipe_ingredient.html"
+    template_name = "recipe_ingredients/update.html"
     success_url = reverse_lazy("recipes")
 
     def get_success_url(self):
@@ -146,7 +146,7 @@ def recipe_ingredient_delete_view(request, recipe_pk, pk):
 class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
     fields = ["name", "uom"]
-    template_name = "meals/create_ingredient.html"
+    template_name = "ingredients/create.html"
     success_url = reverse_lazy("create_ingredient")
 
     def get_success_url(self):
@@ -156,7 +156,7 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 
 class OrderListView(LoginRequiredMixin, ListView):
     model = Order
-    template_name = "meals/order_list.html"
+    template_name = "orders/list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -167,7 +167,7 @@ class OrderListView(LoginRequiredMixin, ListView):
 class OrderCreateView(LoginRequiredMixin, CreateView):
     model = Order
     fields = ["date"]
-    template_name = "meals/create_order.html"
+    template_name = "orders/create.html"
 
     def get_success_url(self):
         return reverse("update_order", args=[self.object.id])
@@ -176,7 +176,7 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
 class OrderUpdateView(LoginRequiredMixin, UpdateView):
     model = Order
     fields = ["date", "is_complete"]
-    template_name = "meals/update_order.html"
+    template_name = "orders/update.html"
     success_url = reverse_lazy("orders")
 
     def get_context_data(self, **kwargs):
