@@ -61,7 +61,8 @@ def meal_create_view(request):
             messages.add_message(request, messages.SUCCESS, "Meal scheduled.")
             return redirect(reverse("meals"))
     else:
-        meal_form = MealForm()
+        default_planned = Meal.objects.all().order_by("id").last().planned
+        meal_form = MealForm(initial={"planned": default_planned})
     context = {
         "section": "meals",
         "form": meal_form,
