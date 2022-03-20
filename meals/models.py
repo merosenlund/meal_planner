@@ -1,12 +1,20 @@
 from django.db import models
 
 
+class LowerCaseCharField(models.CharField):
+    def get_prep_value(self, value):
+        return str(value).lower()
+
+
 class Ingredient(models.Model):
-    name = models.CharField(max_length=150, unique=True)
+    name = LowerCaseCharField(max_length=150, unique=True)
     uom = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name.title()
+
+    class Meta:
+        ordering = ["name"]
 
 
 class Recipe(models.Model):
