@@ -14,7 +14,7 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("id", "name", "uom")
 
 
 @admin.register(Meal)
