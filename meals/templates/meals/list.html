@@ -45,9 +45,14 @@
                     -
                   {% endif %}
                 </td>
-                <td>
+                <td class="{% if meal.order and meal.order.is_complete%}has-background-success{% else %}has-background-danger{% endif %} has-text-white">
                   {% if meal.order %}
                     #{{ meal.order.id }}
+                    {% if meal.order.is_complete %}
+                      - ordered
+                    {% else %}
+                      - not ordered
+                    {% endif %}
                   {% else %}
                     -
                   {% endif %}
