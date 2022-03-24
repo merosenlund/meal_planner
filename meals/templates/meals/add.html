@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="mt-4">
+    <div class="container">
+      <div class="content">
+        <h1 class="title">Choose {% if has_fruit %}Fruit{% endif %}{% if has_fruit and has_veggies %} and{% endif %} {% if has_veggies%}Vegetable{% endif %}</h1>
+      </div>
+      <div class="columns">
+        <div role="region" aria-label="Meal list information" class="column is-one-third">
+          <p>Use the form to the right to specify which {% if has_fruit %}fruit{% endif %}{% if has_fruit and has_veggies %} and{% endif %} {% if has_veggies%}vegetable{% endif %} will be served with this meal.</p>
+        </div>
+        <div role="region" aria-label="Meal scheduling form" class="column is-one-half">
+          {% if form %}
+            <div class="content box">
+              <form method="post">
+                {% csrf_token %}
+                {% if has_fruit %}
+                  <div class="field">
+                    <label class="label" for="id_fruit">Fruit:</label>
+                    <div class="control">
+                      <div>
+                          {{ form.fruit }}
+                          <a href="{% url "create_fruit" meal.id %}" class="button ml-4 is-info is-outlined">New Fruit</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label" for="id_fruit_quantity">Fruit Quantity:</label>
+                    <div class="control">
+                      <div>
+                          {{ form.fruit_quantity }}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if has_veggies %}
+                  <div class="field">
+                    <label class="label" for="id_vegetable">Vegetable:</label>
+                    <div class="control">
+                      <div>
+                          {{ form.vegetable }}
+                          <a href="{% url "create_vegetable" meal.id %}" class="button ml-4 is-info is-outlined">New Vegetable</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label" for="id_vegetable_quantity">Vegetable Quantity:</label>
+                    <div class="control">
+                          {{ form.vegetable_quantity }}
+                    </div>
+                  </div>
+                {% endif %}
+                <div class="buttons">
+                  <input class="button is-primary mt-4 mr-4" type="submit" value="Add">
+                </div>
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

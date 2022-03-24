@@ -15,7 +15,13 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 
 from .models import Ingredient, Order, Recipe, Meal, RecipeIngredient
-from .forms import MealForm, MealOrderForm, RecipeForm, RecipeIngredientForm
+from .forms import (
+    MealForm,
+    MealOrderForm,
+    RecipeForm,
+    RecipeIngredientForm,
+    FruitAndVeggieForm,
+)
 
 
 @login_required
@@ -31,7 +37,14 @@ def meal_list(request):
 
 class MealEditView(LoginRequiredMixin, UpdateView):
     model = Meal
-    fields = ["date", "recipe", "planned", "actual"]
+    fields = ["date",
+              "recipe",
+              "planned",
+              "actual",
+              "fruit",
+              "fruit_serving",
+              "vegetable",
+              "vegetable_serving"]
     template_name = "meals/update.html"
     success_url = reverse_lazy("meals")
 
@@ -57,9 +70,15 @@ def meal_create_view(request):
     if request.method == "POST":
         meal_form = MealForm(request.POST)
         if meal_form.is_valid():
-            meal_form.save()
+            meal = meal_form.save()
+            fruit = Ingredient.objects.get(name="fruit")
+            veggie = Ingredient.objects.get(name="vegetable")
+            ingredients = meal.recipe.ingredients.all()
             messages.add_message(request, messages.SUCCESS, "Meal scheduled.")
-            return redirect(reverse("meals"))
+            if fruit in ingredients or veggie in ingredients:
+                return redirect(reverse("add_fruits_and_veggies", args=[meal.id]))
+            else:
+                return redirect(reverse("meals"))
     else:
         default_planned = Meal.objects.all().order_by("id").last().planned
         meal_form = MealForm(initial={"planned": default_planned})
@@ -68,6 +87,71 @@ def meal_create_view(request):
         "form": meal_form,
     }
     return render(request, "meals/create.html", context)
+
+
+@login_required
+def add_fruits_and_veggies(request, pk):
+    meal = Meal.objects.get(pk=pk)
+    ingredients = meal.recipe.ingredients.all()
+    fruit = Ingredient.objects.get(name="fruit")
+    veggie = Ingredient.objects.get(name="vegetable")
+    has_veggies = veggie in ingredients
+    has_fruit = fruit in ingredients
+    context = {
+        "meal": meal,
+        "has_veggies": has_veggies,
+        "has_fruit": has_fruit
+    }
+
+    if request.method == "GET":
+        context["form"] = FruitAndVeggieForm()
+    else:
+        form = FruitAndVeggieForm(request.POST)
+        if form.is_valid():
+            if has_fruit:
+                meal.fruit = form.cleaned_data["fruit"]
+                meal.fruit_serving = form.cleaned_data["fruit_quantity"]
+            if has_veggies:
+                meal.vegetable = form.cleaned_data["vegetable"]
+                meal.vegetable_serving = form.cleaned_data["vegetable_quantity"]
+            meal.save()
+            return redirect("meals")
+        else:
+            context["form"] = form
+
+    return render(request, "meals/add.html", context)
+
+
+class FruitCreateView(LoginRequiredMixin, CreateView):
+    model = Ingredient
+    fields = ["name", "uom"]
+    template_name = "ingredients/fruit.html"
+
+    def get_success_url(self):
+        url = reverse("add_fruits_and_veggies", args=[self.kwargs.get("meal_pk")])
+        return url
+
+    def form_valid(self, form):
+        fruit = form.save(commit=False)
+        fruit.type = "fruit"
+        fruit.save()
+        return redirect(self.get_success_url())
+
+
+class VeggieCreateView(LoginRequiredMixin, CreateView):
+    model = Ingredient
+    fields = ["name", "uom"]
+    template_name = "ingredients/veggie.html"
+
+    def get_success_url(self):
+        url = reverse("add_fruits_and_veggies", args=[self.kwargs.get("meal_pk")])
+        return url
+
+    def form_valid(self, form):
+        veggie = form.save(commit=False)
+        veggie.type = "vegetable"
+        veggie.save()
+        return redirect(self.get_success_url())
 
 
 @login_required
