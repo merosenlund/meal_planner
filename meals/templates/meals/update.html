@@ -12,12 +12,10 @@
         </div>
         <div role="region" aria-label="Meal scheduling form" class="column is-one-third box">
           <form method="post">
+            <input class="button is-primary mt-4 mr-4" type="submit" value="Update">
+            <a class="button is-danger mt-4" style="align-items: baseline;" href={% url "delete_meal" object.id %}>Delete</a>
             {{ form.as_bulma }}
             {% csrf_token %}
-            {% comment %} <div class="buttons"> {% endcomment %}
-              <input class="button is-primary mt-4 mr-4" type="submit" value="Update">
-              <a class="button is-danger mt-4" style="align-items: baseline;" href={% url "delete_meal" object.id %}>Delete</a>
-            {% comment %} </div> {% endcomment %}
           </form>
         </div>
       </div>

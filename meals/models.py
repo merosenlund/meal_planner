@@ -9,6 +9,8 @@ class LowerCaseCharField(models.CharField):
 class Ingredient(models.Model):
     name = LowerCaseCharField(max_length=150, unique=True)
     uom = models.CharField(max_length=10)
+    type = models.CharField(default="standard",
+                            max_length=50)
 
     def __str__(self):
         return self.name.title()
@@ -23,7 +25,8 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         related_name="recipes",
-        through="RecipeIngredient"
+        through="RecipeIngredient",
+        limit_choices_to={"type": "standard"}
     )
 
     def __str__(self):
@@ -32,7 +35,8 @@ class Recipe(models.Model):
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE,
+                                   limit_choices_to={"type": "standard"})
     serving = models.FloatField()
 
     def __str__(self):
@@ -82,6 +86,18 @@ class Meal(models.Model):
         related_name="meals",
         on_delete=models.PROTECT
     )
+    fruit = models.ForeignKey(Ingredient,
+                              on_delete=models.PROTECT,
+                              null=True, blank=True,
+                              related_name="meal_fruit",
+                              limit_choices_to={"type": "fruit"})
+    fruit_serving = models.FloatField(null=True, blank=True, default=0)
+    vegetable = models.ForeignKey(Ingredient,
+                                  on_delete=models.PROTECT,
+                                  null=True, blank=True,
+                                  related_name="meal_vegatable",
+                                  limit_choices_to={"type": "vegetable"})
+    vegetable_serving = models.FloatField(null=True, blank=True, default=0)
 
     class Meta:
         ordering = ["date", "-actual"]
@@ -101,6 +117,14 @@ class Meal(models.Model):
             ingredient = recipe_ingredient.ingredient.name
             amount = round(recipe_ingredient.serving * planned)
             uom = recipe_ingredient.ingredient.uom
+            if ingredient == "vegetable" and self.vegetable:
+                ingredient = self.vegetable.name
+                amount = round(self.vegetable_serving * planned)
+                uom = self.vegetable.uom
+            elif ingredient == "fruit" and self.fruit:
+                ingredient = self.fruit.name
+                amount = round(self.fruit_serving * planned)
+                uom = self.fruit.uom
             if ingredients.get(ingredient):
                 ingredients[ingredient][0] += amount
             else:

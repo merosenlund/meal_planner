@@ -1,5 +1,10 @@
 @import url(//fonts.googleapis.com/css?family=Muli);
 
+
+.field {
+    overflow: auto;
+}
+
 body {
     margin:0;
     padding:0;
@@ -86,7 +91,7 @@ ol {
 
 /* forms */
 form {
-    overflow:auto;
+    overflow:hidden;
 }
 
 form p {
