@@ -47,6 +47,14 @@ class RecipeIngredient(models.Model):
         ordering = ["id"]
 
 
+class MealIngredient(models.Model):
+    meal = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    Ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    total = models.PositiveSmallIntegerField()
+    put_out = models.PositiveSmallIntegerField()
+    left_over = models.PositiveSmallIntegerField()
+
+
 class Order(models.Model):
     date = models.DateField()
     is_complete = models.BooleanField(default=False)
