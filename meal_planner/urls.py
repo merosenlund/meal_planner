@@ -14,12 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, reverse_lazy
+from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("meals/", include("meals.urls")),
+    path("recipes/", include("recipes.urls")),
+    path("ingredients/", include("ingredients.urls")),
+    path("inventory/", include("inventory.urls")),
+    path("orders/", include("orders.urls")),
     path("", RedirectView.as_view(pattern_name="meals", permanent=False)),
 ]
