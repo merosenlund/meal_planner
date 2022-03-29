@@ -25,6 +25,9 @@
           <li {% if section == "orders" %}class="selected"{% endif %}>
             <a href="{% url "orders" %}">Orders</a>
           </li>
+          <li {% if section == "inventory" %}class="selected"{% endif %}>
+            <a href="{% url "inventory_list" %}">Inventory</a>
+          </li>
           {% if user.is_superuser %}
             <li>
               <a href="/admin">Admin</a>
