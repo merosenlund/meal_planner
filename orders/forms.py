@@ -1,5 +1,6 @@
 from django import forms
 from meals.models import Meal
+from orders.models import Order
 
 
 class MealOrderForm(forms.Form):
@@ -10,5 +11,14 @@ class MealOrderForm(forms.Form):
 
     class Meta:
         labels = {
-            "meals": "Meals not on any orders:"
+            "meals": "Meals not on any orders:",
+        }
+
+
+class OrderUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ["date", "is_complete"]
+        labels = {
+            "is_complete": "Purchased"
         }
