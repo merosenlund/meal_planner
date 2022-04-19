@@ -16,6 +16,7 @@ from meals.models import Meal
 from orders.models import Order
 from orders.forms import (
     MealOrderForm,
+    OrderUpdateForm
 )
 
 
@@ -40,7 +41,7 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
 
 class OrderUpdateView(LoginRequiredMixin, UpdateView):
     model = Order
-    fields = ["date", "is_complete"]
+    form_class = OrderUpdateForm
     template_name = "orders/update.html"
     success_url = reverse_lazy("orders")
 
