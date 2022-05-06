@@ -9,7 +9,7 @@ class Ingredient(models.Model):
                             max_length=50)
 
     def __str__(self):
-        return self.name.title()
+        return f"{self.name.title()} ({self.uom})"
 
     class Meta:
         ordering = ["name"]
