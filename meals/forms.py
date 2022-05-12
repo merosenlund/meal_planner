@@ -16,12 +16,18 @@ class FruitAndVeggieForm(Form):
         queryset=Ingredient.objects.filter(type="vegetable"),
         required=False
     )
-    vegetable_quantity = forms.FloatField(required=False)
+    vegetable_quantity = forms.FloatField(
+        required=False,
+        label="Amount per person"
+    )
     fruit = forms.ModelChoiceField(
         queryset=Ingredient.objects.filter(type="fruit"),
         required=False
     )
-    fruit_quantity = forms.FloatField(required=False)
+    fruit_quantity = forms.FloatField(
+        required=False,
+        label="Amount per person",
+    )
 
 
 class FruitForm(ModelForm):
