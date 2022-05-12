@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm, Form
+from django.core.validators import MinValueValidator
 
 from meals.models import Meal
 from ingredients.models import Ingredient
@@ -18,7 +19,8 @@ class FruitAndVeggieForm(Form):
     )
     vegetable_quantity = forms.FloatField(
         required=False,
-        label="Amount per person"
+        label="Amount per person",
+        validators=[MinValueValidator(0, message="Must be zero or greater")]
     )
     fruit = forms.ModelChoiceField(
         queryset=Ingredient.objects.filter(type="fruit"),
@@ -27,6 +29,7 @@ class FruitAndVeggieForm(Form):
     fruit_quantity = forms.FloatField(
         required=False,
         label="Amount per person",
+        validators=[MinValueValidator(0, message="Must be zero or greater")]
     )
 
 

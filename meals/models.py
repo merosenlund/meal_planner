@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 class Meal(models.Model):
@@ -8,8 +9,14 @@ class Meal(models.Model):
         related_name="meal",
         on_delete=models.CASCADE
     )
-    planned = models.SmallIntegerField(null=True, blank=True)
-    actual = models.SmallIntegerField(null=True, blank=True)
+    planned = models.SmallIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(0, message="Must be zero or larger")]
+    )
+    actual = models.SmallIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(0, message="Must be zero or larger")]
+    )
     order = models.ForeignKey(
         "orders.Order",
         null=True, blank=True,
@@ -21,7 +28,12 @@ class Meal(models.Model):
                               null=True, blank=True,
                               related_name="meal_fruit",
                               limit_choices_to={"type": "fruit"})
-    fruit_serving = models.FloatField(null=True, blank=True, default=0)
+    fruit_serving = models.FloatField(
+        null=True,
+        blank=True,
+        default=0,
+        validators=[MinValueValidator(0, message="Less than zero not allowed")]
+    )
     vegetable = models.ForeignKey("ingredients.Ingredient",
                                   on_delete=models.PROTECT,
                                   null=True, blank=True,

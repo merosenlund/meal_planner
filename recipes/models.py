@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 from ingredients.models import Ingredient
 
 
@@ -21,7 +22,9 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(Ingredient,
                                    on_delete=models.CASCADE,
                                    limit_choices_to={"type": "standard"})
-    serving = models.FloatField()
+    serving = models.FloatField(
+        validators=[MinValueValidator(0, message="Must be zero or larger")]
+        )
 
     def __str__(self):
         return f"{self.ingredient} for {self.recipe}"
