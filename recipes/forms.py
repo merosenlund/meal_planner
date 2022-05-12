@@ -14,5 +14,6 @@ class RecipeIngredientForm(ModelForm):
         model = RecipeIngredient
         fields = ["ingredient", "serving"]
         labels = {
-            "ingredient": "Ingredient to Add"
+            "ingredient": "Ingredient to Add",
+            "serving": "Amount per person"
         }

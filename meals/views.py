@@ -69,6 +69,7 @@ def meal_create_view(request):
             else:
                 return redirect(reverse("meals"))
     else:
+
         last_meal = Meal.objects.all().order_by("id").last()
         if last_meal:
             default_planned = last_meal.planned
