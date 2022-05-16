@@ -41,7 +41,7 @@
               {% for recipe_ingredient in recipe.recipeingredient_set.all %}
                 <tr>
                   <td>{{ recipe_ingredient.ingredient }}</td>
-                  <td>{{ recipe_ingredient.serving }}</td>
+                  <td>{{ recipe_ingredient.serving }} {{ recipe_ingredient.ingredient.uom}}</td>
                   <td><a class="button is-text" href="{% url "edit_recipe_ingredient" recipe.id recipe_ingredient.id%}">Edit</a></td>
                   <td><a class="button is-text" href="{% url "delete_recipe_ingredient" recipe.id recipe_ingredient.id %}">Remove</a></td>
                 </tr>
