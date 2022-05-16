@@ -22,9 +22,11 @@ from ingredients.models import (
 )
 
 
+# TODO - Change this into a Class View
 @login_required
 def meal_list(request):
     today = datetime.now().date()
+    # TODO Make it so that all of the meals are shown in the list (Add pagination?)
     meals = Meal.objects.filter(date__gte=today)
     context = {
         "section": "meals",
@@ -33,6 +35,8 @@ def meal_list(request):
     return render(request, "meals/list.html", context)
 
 
+# TODO - Make is so that this view only shows fruits or veggies if they are part of the
+# recipe the meal has
 class MealEditView(LoginRequiredMixin, UpdateView):
     model = Meal
     fields = ["date",
@@ -53,6 +57,7 @@ class MealDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "meals/delete.html"
 
 
+# TODO - Change this into a Class View
 @login_required
 def meal_create_view(request):
     if request.method == "POST":
@@ -152,6 +157,8 @@ class VeggieCreateView(LoginRequiredMixin, CreateView):
         return redirect(self.get_success_url())
 
 
+# TODO - Make it so that the user chooses what meals they want to print before the
+# meals are printed out
 @login_required
 def print_meals(request):
     from reportlab.lib.styles import getSampleStyleSheet

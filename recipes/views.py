@@ -16,6 +16,7 @@ from recipes.forms import (
 )
 
 
+# TODO - Change this into a Class View
 @login_required
 def recipe_list(request):
     recipes = Recipe.objects.all().order_by("-is_active")
@@ -26,6 +27,7 @@ def recipe_list(request):
     return render(request, "recipes/list.html", context)
 
 
+# TODO - Change this into a Class View
 @login_required
 def recipe_create_view(request):
     if request.method == "POST":
@@ -94,6 +96,7 @@ class RecipeIngredientEditView(LoginRequiredMixin, UpdateView):
         return url
 
 
+# TODO - Change this into a Class View (I'm not sure if I should change this. It definitely seems like it is overly simplified)
 @login_required
 def recipe_ingredient_delete_view(request, recipe_pk, pk):
     RecipeIngredient.objects.get(pk=pk).delete()

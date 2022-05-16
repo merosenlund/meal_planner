@@ -41,6 +41,7 @@ class Meal(models.Model):
                                   limit_choices_to={"type": "vegetable"})
     vegetable_serving = models.FloatField(null=True, blank=True, default=0)
 
+    # TODO - Make it so that meals are ordered by date (Looks like this might already be the case)
     class Meta:
         ordering = ["date", "-actual"]
 
